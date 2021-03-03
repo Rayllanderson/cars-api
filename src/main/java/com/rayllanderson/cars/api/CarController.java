@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.rayllanderson.cars.domain.entities.Car;
 import com.rayllanderson.cars.domain.entities.enums.CarType;
 import com.rayllanderson.cars.domain.service.CarService;
-import com.rayllanderson.cars.domain.service.exceptions.ObjectNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1.0/cars")
@@ -32,11 +33,7 @@ public class CarController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Car> getById(@PathVariable Long id) {
-	try {
-	    return ResponseEntity.ok(service.findById(id));
-	} catch (ObjectNotFoundException e) {
-	    return ResponseEntity.notFound().build();
-	}
+	return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping("/type/{type}")
@@ -49,6 +46,20 @@ public class CarController {
 	car = service.save(car);
 	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(car.getId()).toUri();
 	return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Car> update(@PathVariable Long id, @RequestBody Car car) {
+	Car carFromDatabase = service.findById(id);
+	service.updateData(carFromDatabase, car);
+	service.save(carFromDatabase);
+	return ResponseEntity.noContent().build();
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Car> delete(@PathVariable Long id) {
+	service.deleteById(id);
+	return ResponseEntity.noContent().build();
     }
 
 }

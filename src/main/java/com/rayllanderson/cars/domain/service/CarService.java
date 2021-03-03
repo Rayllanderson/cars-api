@@ -2,6 +2,7 @@ package com.rayllanderson.cars.domain.service;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,21 @@ public class CarService {
     public Car findById(Long id) {
 	return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
     }
-    
-    public List<Car> findByType(CarType type){
+
+    public List<Car> findByType(CarType type) {
 	return repository.findByType(type);
     }
-    
-    public Car save (Car car) {
+
+    public Car save(Car car) {
 	return repository.save(car);
+    }
+
+    public void updateData(Car carFromDatabase, Car car) {
+	BeanUtils.copyProperties(car, carFromDatabase, "id");
+    }
+
+    public void deleteById(Long id) {
+	repository.delete(findById(id));
     }
 
 }

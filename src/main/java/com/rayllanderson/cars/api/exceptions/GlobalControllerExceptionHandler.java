@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.rayllanderson.cars.domain.entities.enums.CarType;
+import com.rayllanderson.cars.domain.service.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
@@ -21,10 +22,17 @@ public class GlobalControllerExceptionHandler {
 	HttpStatus status = HttpStatus.BAD_REQUEST;
 	String URI = request.getRequestURI();
 	String typedType = URI.split("/type")[1];
-	String message = "There is no type of " + typedType + ". Available types: "
-		+ Arrays.asList(CarType.values());
-	
+	String message = "There is no type of " + typedType + ". Available types: " + Arrays.asList(CarType.values());
+
 	StandardError err = new StandardError(Instant.now(), status.value(), "Bad Request", message, URI);
+	return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<StandardError> handleObjectNotFound(RuntimeException e, HttpServletRequest request) {
+	HttpStatus status = HttpStatus.NOT_FOUND;
+	StandardError err = new StandardError(Instant.now(), status.value(), "Not Found", e.getMessage(),
+		request.getRequestURI());
 	return ResponseEntity.status(status).body(err);
     }
 }
