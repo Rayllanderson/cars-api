@@ -27,5 +27,9 @@ public class CarService {
     public List<Car> findByType(CarType type){
 	return repository.findByType(type);
     }
+    
+    public Car save (Car car) {
+	return repository.save(car);
+    }
 
 }
