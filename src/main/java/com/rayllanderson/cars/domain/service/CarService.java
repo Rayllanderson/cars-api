@@ -7,15 +7,20 @@ import org.springframework.stereotype.Service;
 
 import com.rayllanderson.cars.domain.entities.Car;
 import com.rayllanderson.cars.domain.repositories.CarRepository;
+import com.rayllanderson.cars.domain.service.exceptions.ObjectNotFoundException;
 
 @Service
 public class CarService {
-    
+
     @Autowired
     private CarRepository repository;
-    
+
     public List<Car> findAll() {
 	return repository.findAll();
+    }
+
+    public Car findById(Long id) {
+	return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
     }
 
 }
