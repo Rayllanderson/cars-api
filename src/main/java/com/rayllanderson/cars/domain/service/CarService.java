@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rayllanderson.cars.domain.entities.Car;
+import com.rayllanderson.cars.domain.entities.enums.CarType;
 import com.rayllanderson.cars.domain.repositories.CarRepository;
 import com.rayllanderson.cars.domain.service.exceptions.ObjectNotFoundException;
 
@@ -21,6 +22,10 @@ public class CarService {
 
     public Car findById(Long id) {
 	return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
+    }
+    
+    public List<Car> findByType(CarType type){
+	return repository.findByType(type);
     }
 
 }

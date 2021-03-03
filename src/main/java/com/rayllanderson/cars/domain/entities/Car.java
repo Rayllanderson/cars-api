@@ -3,9 +3,13 @@ package com.rayllanderson.cars.domain.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.rayllanderson.cars.domain.entities.enums.CarType;
 
 @Entity
 public class Car implements Serializable {
@@ -17,12 +21,17 @@ public class Car implements Serializable {
     private Long id;
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private CarType type;
+
     public Car() {
     }
 
-    public Car(Long id, String name) {
+    public Car(Long id, String name, CarType type) {
+	super();
 	this.id = id;
 	this.name = name;
+	this.setType(type);
     }
 
     public Long getId() {
@@ -39,6 +48,14 @@ public class Car implements Serializable {
 
     public void setName(String name) {
 	this.name = name;
+    }
+
+    public CarType getType() {
+	return type;
+    }
+
+    public void setType(CarType type) {
+	this.type = type;
     }
 
     @Override

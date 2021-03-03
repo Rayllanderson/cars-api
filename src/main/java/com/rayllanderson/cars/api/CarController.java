@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rayllanderson.cars.domain.entities.Car;
+import com.rayllanderson.cars.domain.entities.enums.CarType;
 import com.rayllanderson.cars.domain.service.CarService;
 import com.rayllanderson.cars.domain.service.exceptions.ObjectNotFoundException;
 
@@ -21,8 +22,8 @@ public class CarController {
     private CarService service;
 
     @GetMapping
-    public List<Car> getAll() {
-	return service.findAll();
+    public ResponseEntity<List<Car>> getAll() {
+	return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
@@ -32,6 +33,11 @@ public class CarController {
 	} catch (ObjectNotFoundException e) {
 	    return ResponseEntity.notFound().build();
 	}
+    }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<Car>> getByType(@PathVariable CarType type) {
+	return ResponseEntity.ok(service.findByType(type));
     }
 
 }
