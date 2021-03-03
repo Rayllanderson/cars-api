@@ -20,27 +20,26 @@ public class CarService {
     private CarRepository repository;
 
     public List<CarDTO> findAll() {
-	return repository.findAll().stream().map(x -> new CarDTO(x)).collect(Collectors.toList());
+	return repository.findAll().stream().map(CarDTO::create).collect(Collectors.toList());
     }
 
     public CarDTO findById(Long id) throws ObjectNotFoundException {
-	return new CarDTO(repository.findById(id)
+	return CarDTO.create(repository.findById(id)
 		.orElseThrow(() -> new ObjectNotFoundException("Object not found on the database")));
     }
 
     public List<CarDTO> findByType(CarType type) {
-	return repository.findByType(type).stream().map(x -> new CarDTO(x)).collect(Collectors.toList());
+	return repository.findByType(type).stream().map(CarDTO::create).collect(Collectors.toList());
     }
 
     public CarDTO save(CarDTO dto) {
-	Car car = fromDTO(dto);
-	return new CarDTO(repository.save(car));
+	return CarDTO.create(repository.save(fromDTO(dto)));
     }
 
     public CarDTO update(Long id, CarDTO fromBody) throws ObjectNotFoundException {
 	return repository.findById(id).map(fromDatabase -> {
 	    updateData(fromBody, fromDatabase);
-	    return this.save(new CarDTO(fromDatabase));
+	    return this.save(CarDTO.create(fromDatabase));
 	}).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
     }
 

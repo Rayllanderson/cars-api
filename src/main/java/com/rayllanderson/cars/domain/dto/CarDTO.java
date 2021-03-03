@@ -1,5 +1,7 @@
 package com.rayllanderson.cars.domain.dto;
 
+import org.modelmapper.ModelMapper;
+
 import com.rayllanderson.cars.domain.entities.Car;
 import com.rayllanderson.cars.domain.entities.enums.CarType;
 
@@ -14,10 +16,9 @@ public class CarDTO {
     private String name;
     private CarType type;
 
-    public CarDTO(Car car) {
-	this.id = car.getId();
-	this.name = car.getName();
-	this.type = car.getType();
+    public static CarDTO create(Car car) {
+	ModelMapper modelMapper = new ModelMapper();
+	return modelMapper.map(car, CarDTO.class);
     }
 
 }
