@@ -50,9 +50,7 @@ public class CarController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Car> update(@PathVariable Long id, @RequestBody Car car) {
-	Car carFromDatabase = service.findById(id);
-	service.updateData(carFromDatabase, car);
-	service.save(carFromDatabase);
+	service.update(id, car);
 	return ResponseEntity.noContent().build();
     }
     

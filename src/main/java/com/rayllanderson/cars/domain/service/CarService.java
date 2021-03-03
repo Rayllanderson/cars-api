@@ -22,7 +22,8 @@ public class CarService {
     }
 
     public Car findById(Long id) {
-	return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
+	return repository.findById(id)
+		.orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
     }
 
     public List<Car> findByType(CarType type) {
@@ -33,12 +34,19 @@ public class CarService {
 	return repository.save(car);
     }
 
-    public void updateData(Car carFromDatabase, Car car) {
-	BeanUtils.copyProperties(car, carFromDatabase, "id");
+    public Car update(Long id, Car fromBody) {
+	return repository.findById(id).map(fromDatabase -> {
+	    updateData(fromBody, fromDatabase);
+	    return this.save(fromDatabase);
+	}).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
     }
 
     public void deleteById(Long id) {
 	repository.delete(findById(id));
+    }
+
+    public void updateData(Car source, Car target) {
+	BeanUtils.copyProperties(source, target, "id");
     }
 
 }
