@@ -20,39 +20,38 @@ public class CarService {
     private CarRepository repository;
 
     public List<CarDTO> findAll() {
-	return repository.findAll().stream().map(CarDTO::create).collect(Collectors.toList());
+        return repository.findAll().stream().map(CarDTO::create).collect(Collectors.toList());
     }
 
     public CarDTO findById(Long id) throws ObjectNotFoundException {
-	return CarDTO.create(repository.findById(id)
-		.orElseThrow(() -> new ObjectNotFoundException("Object not found on the database")));
+        return CarDTO.create(repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database")));
     }
 
     public List<CarDTO> findByType(CarType type) {
-	return repository.findByType(type).stream().map(CarDTO::create).collect(Collectors.toList());
+        return repository.findByType(type).stream().map(CarDTO::create).collect(Collectors.toList());
     }
 
     public CarDTO save(CarDTO dto) {
-	return CarDTO.create(repository.save(fromDTO(dto)));
+        return CarDTO.create(repository.save(fromDTO(dto)));
     }
 
     public CarDTO update(Long id, CarDTO fromBody) throws ObjectNotFoundException {
-	return repository.findById(id).map(fromDatabase -> {
-	    updateData(fromBody, fromDatabase);
-	    return this.save(CarDTO.create(fromDatabase));
-	}).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
+        return repository.findById(id).map(fromDatabase -> {
+            updateData(fromBody, fromDatabase);
+            return this.save(CarDTO.create(fromDatabase));
+        }).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database"));
     }
 
     public void deleteById(Long id) throws ObjectNotFoundException {
-	this.findById(id);
-	repository.deleteById(id);
+        this.findById(id);
+        repository.deleteById(id);
     }
 
     public void updateData(CarDTO source, Car target) {
-	BeanUtils.copyProperties(source, target, "id");
+        BeanUtils.copyProperties(source, target, "id");
     }
 
     private Car fromDTO(CarDTO dto) {
-	return new Car(dto.getId(), dto.getName(), dto.getType());
+        return new Car(dto.getId(), dto.getName(), null, null, null, null, null, dto.getType());
     }
 }

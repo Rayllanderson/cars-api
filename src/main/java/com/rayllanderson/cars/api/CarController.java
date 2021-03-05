@@ -28,36 +28,36 @@ public class CarController {
 
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAll() {
-	return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CarDTO> getById(@PathVariable Long id) {
-	return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping("/type/{type}")
     public ResponseEntity<List<CarDTO>> getByType(@PathVariable CarType type) {
-	return ResponseEntity.ok(service.findByType(type));
+        return ResponseEntity.ok(service.findByType(type));
     }
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody CarDTO car) {
-	car = service.save(car);
-	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(car.getId()).toUri();
-	return ResponseEntity.created(uri).build();
+        car = service.save(car);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(car.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CarDTO> update(@PathVariable Long id, @RequestBody CarDTO car) {
-	service.update(id, car);
-	return ResponseEntity.noContent().build();
+        service.update(id, car);
+        return ResponseEntity.noContent().build();
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-	service.deleteById(id);
-	return ResponseEntity.noContent().build();
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

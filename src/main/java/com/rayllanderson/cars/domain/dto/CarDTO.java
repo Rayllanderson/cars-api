@@ -17,8 +17,6 @@ public class CarDTO {
     private CarType type;
 
     public static CarDTO create(Car car) {
-	ModelMapper modelMapper = new ModelMapper();
-	return modelMapper.map(car, CarDTO.class);
+        return new ModelMapper().map(car, CarDTO.class);
     }
-
 }

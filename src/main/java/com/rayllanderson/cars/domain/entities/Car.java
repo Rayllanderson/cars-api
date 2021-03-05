@@ -30,7 +30,12 @@ public class Car implements Serializable {
     @EqualsAndHashCode.Include
     private Long id;
     private String name;
-
+    private String description;
+    private String urlPhoto;
+    private String urlVideo;
+    private String latitude;
+    private String longitude;
+    
     @Enumerated(EnumType.STRING)
     private CarType type;
 
