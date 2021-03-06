@@ -1,8 +1,10 @@
 package com.rayllanderson.cars.domain.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +26,26 @@ public class CarService {
     }
 
     public CarDTO findById(Long id) throws ObjectNotFoundException {
-        return CarDTO.create(repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object not found on the database")));
+        return CarDTO.create(repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object not found on the " +
+                "database")));
     }
 
     public List<CarDTO> findByType(CarType type) {
         return repository.findByType(type).stream().map(CarDTO::create).collect(Collectors.toList());
     }
 
-    public CarDTO save(CarDTO dto) {
-        return CarDTO.create(repository.save(fromDTO(dto)));
+    public CarDTO save(CarDTO dto) throws IllegalArgumentException {
+        try {
+            Assert.notNull(dto.getType());
+            Assert.notNull(dto.getName());
+            if (dto.getName().isEmpty())
+                throw new IllegalArgumentException();
+            return CarDTO.create(repository.save(fromDTO(dto)));
+        } catch (IllegalArgumentException e) {
+            String message = "There's a empty attribute in the body. " + "Please use a Body like this: {'name': 'not empty " +
+                    "string', 'type' : " + " any of " + Arrays.toString(CarType.values()) + "}";
+            throw new IllegalArgumentException(message);
+        }
     }
 
     public CarDTO update(Long id, CarDTO fromBody) throws ObjectNotFoundException {
