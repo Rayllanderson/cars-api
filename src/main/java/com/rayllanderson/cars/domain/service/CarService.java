@@ -65,6 +65,6 @@ public class CarService {
     }
 
     private Car fromDTO(CarDTO dto) {
-        return new Car(dto.getId(), dto.getName(), null, null, null, null, null, dto.getType());
+        return new Car(dto.getId(), dto.getName(), dto.getDescription(), dto.getUrlPhoto(), dto.getUrlVideo(), dto.getType());
     }
 }

@@ -44,7 +44,7 @@ public class CarsAPITests {
 
         when(service.save(any(CarDTO.class))).thenReturn(new CarDTO());
 
-        Car car = new Car(null, "Corsa", null, null, null, null, null, CarType.CLASSIC);
+        Car car = new Car(null, "Corsa", null, null, null, CarType.CLASSIC);
         ResponseEntity<Void> responseEntity = controller.save(CarDTO.create(car));
 
         assertThat(responseEntity.getStatusCodeValue()).isEqualTo(201);

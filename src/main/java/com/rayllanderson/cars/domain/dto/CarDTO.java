@@ -15,6 +15,9 @@ public class CarDTO {
     private Long id;
     private String name;
     private CarType type;
+    private String description;
+    private String urlPhoto;
+    private String urlVideo;
 
     public static CarDTO create(Car car) {
         return new ModelMapper().map(car, CarDTO.class);

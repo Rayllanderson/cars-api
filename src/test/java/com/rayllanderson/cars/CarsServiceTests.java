@@ -25,7 +25,7 @@ class CarsServiceTests {
 
     @Test
     void crud() {
-	Car car = new Car(null, "Ferrari", null, null, null, null, null, CarType.SPORTING);
+	Car car = new Car(null, "Ferrari", null, null, null, CarType.SPORTING);
 
 	CarDTO dto = service.save(CarDTO.create(car));
 
